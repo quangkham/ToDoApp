@@ -41,7 +41,6 @@ class LoginViewController: UIViewController {
                             self.showAlert("User account not found.Try again")
                         case .wrongPassword:
                              self.showAlert("Incorrect username/password combination")
-                        
                         default:
                             self.showAlert("Error : \(error.localizedDescription)")
                         }
@@ -91,6 +90,12 @@ class LoginViewController: UIViewController {
     
     }
     
+    @IBAction func signUP(_ sender : UIButton){
+        
+        performSegue(withIdentifier: "goToSignUp", sender: self)
+    }
+    
+    
     func showAlert(_ message: String) {
         let alertController = UIAlertController(title: "To Do App", message: message, preferredStyle: UIAlertController.Style.alert)
         alertController.addAction(UIAlertAction(title: "Dismiss", style: UIAlertAction.Style.default,handler: nil))
@@ -100,4 +105,7 @@ class LoginViewController: UIViewController {
     func signIn() {
         performSegue(withIdentifier: "SignInFromLogin", sender: nil)
     }
+    
+    
+    
 }
