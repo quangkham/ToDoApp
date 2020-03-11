@@ -22,6 +22,9 @@ class ItemsTableViewController: UIViewController, UITableViewDataSource, UITable
         user = Auth.auth().currentUser
         ref = Database.database().reference()
         self.startObservingDatabase()
+        // self of cell resize
+        tableView.estimatedRowHeight = 50
+        tableView.rowHeight = UITableView.automaticDimension
         // Do any additional setup after loading the view.
     }
     
