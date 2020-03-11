@@ -17,19 +17,15 @@ class ItemsTableViewController: UIViewController, UITableViewDataSource, UITable
     private var databaseHandle : DatabaseHandle!
 
     @IBOutlet var tableView: UITableView!
-   
-   
-    
     override func viewDidLoad() {
         super.viewDidLoad()
         user = Auth.auth().currentUser
         ref = Database.database().reference()
-        startObservingDatabase()
+        self.startObservingDatabase()
         // Do any additional setup after loading the view.
     }
     
    
-    
     func numberOfSections(in tableView: UITableView) -> Int {
         return 1
     }
@@ -39,9 +35,10 @@ class ItemsTableViewController: UIViewController, UITableViewDataSource, UITable
     }
     
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
-        let cell = tableView.dequeueReusableCell(withIdentifier: "itemCell" , for: indexPath)
+        let cell = tableView.dequeueReusableCell(withIdentifier: "itemCell" , for: indexPath) as! ItemTableViewCell
         let item = items[indexPath.row]
-        cell.textLabel?.text = item.title
+        cell.itemTitle.text = item.title
+        cell.descripton.text = item.description
         return cell
         }
 
@@ -60,26 +57,37 @@ class ItemsTableViewController: UIViewController, UITableViewDataSource, UITable
         }catch{
             assertionFailure("Error signing out: \(error)")
         }
+        
     }
-    
     
     @IBAction func didTapAddItem(_ sender: UIBarButtonItem) {
         
         let prompt = UIAlertController(title: "To Do App", message: "To Do Item", preferredStyle: .alert)
         let okAction = UIAlertAction(title: "OK", style: .default) { (action) in
-            let userInput = prompt.textFields![0].text
-            if(userInput!.isEmpty){
+            let userInputOfTitle = prompt.textFields![0].text
+            let userInputOfDescription = prompt.textFields![1].text
+            
+            let items = [ "title" : userInputOfTitle , "description" : userInputOfDescription]
+            if(userInputOfTitle!.isEmpty && userInputOfDescription!.isEmpty){
                 return
             }
-            self.ref.child("users").child(self.user.uid).child("items").childByAutoId().child("title").setValue(userInput)
+            self.ref.child("users").child(self.user.uid).child("items").childByAutoId().setValue(items)
+         
         }
-        prompt.addTextField(configurationHandler: nil)
+        
+        prompt.addTextField { (textField) in
+            textField.placeholder = "Title"
+        }
+        prompt.addTextField { (textField) in
+            textField.placeholder = "Add description"
+        }
         prompt.addAction(okAction)
         present(prompt, animated: true, completion: nil)
         
     }
     
     func startObservingDatabase(){
+        
         databaseHandle = ref.child("users/\(self.user.uid)/items").observe(.value, with: { (snapshot) in
             var newItems = [Item]()
             for itemSnapShot in snapshot.children {

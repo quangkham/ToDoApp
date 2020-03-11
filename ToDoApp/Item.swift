@@ -19,6 +19,9 @@ class Item{
         ref = snapshot.ref
         let data = snapshot.value as! Dictionary<String , String>
         title = data["title"]! as String
-        //description = data["description"]! as String
+        description = data["description"]! as String
+        
     }
+    
+   
 }
