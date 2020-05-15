@@ -8,6 +8,8 @@
 
 import UIKit
 import FirebaseAuth
+import FirebaseCrashlytics
+
 
 class LoginViewController: UIViewController {
 
@@ -29,12 +31,12 @@ class LoginViewController: UIViewController {
     
 
     @IBAction func didTapSignIn(_ sender: UIButton) {
-        
+        //fatalError()// to test force crash of firebase crashlytics
         let email = emailField.text
         let password = passwordField.text
         Auth.auth().signIn(withEmail: email!, password: password! , completion: { (user , error) in
             guard let _ = user else {
-                if let error = error {
+                 if let error = error {
                     if let errCode = AuthErrorCode(rawValue: error._code){
                         switch errCode {
                         case .userNotFound:

@@ -97,7 +97,6 @@ class ItemsTableViewController: UIViewController, UITableViewDataSource, UITable
                 let item = Item(snapshot: itemSnapShot as! DataSnapshot)
                 newItems.append(item)
             }
-            
             self.items = newItems
             self.tableView.reloadData()
         })

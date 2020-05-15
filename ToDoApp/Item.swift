@@ -15,6 +15,7 @@ class Item{
    
     var title : String?
     var description : String?
+    
     init(snapshot : DataSnapshot){
         ref = snapshot.ref
         let data = snapshot.value as! Dictionary<String , String>
